@@ -1,0 +1,21 @@
+# Configuration with sensitive data
+# Note: config.js is safe to commit for this project because:
+# - API keys are restricted by domain in Google Cloud Console
+# - CLIENT_ID is meant to be public (used in frontend)
+# - FOLDER_ID is just an identifier, not sensitive
+# config.js
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Our Wedding Gallery</h1>
+            <p class="subtitle">Beautiful moments captured forever</p>
+        </header>
+
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading images...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;">
+            <p>Unable to load images. Please check your configuration.</p>
+        </div>
+
+        <div id="auth-section" class="auth-section" style="display: none;">
+            <button id="authorize-button" class="auth-button">
+                Sign in with Google to view photos
+            </button>
+        </div>
+
+        <div id="gallery" class="gallery"></div>
+
+        <div id="lightbox" class="lightbox" style="display: none;">
+            <span class="close">&times;</span>
+            <img class="lightbox-content" id="lightbox-img">
+            <div class="lightbox-caption" id="caption"></div>
+            <button class="nav-button prev" id="prev-btn">&#10094;</button>
+            <button class="nav-button next" id="next-btn">&#10095;</button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    <script src="app.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
