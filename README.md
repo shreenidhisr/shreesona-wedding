@@ -11,6 +11,14 @@ A lightweight, beautiful web application that displays images from a Google Driv
 - 💰 **Free hosting** on GitHub Pages, Netlify, or Vercel
 - 🔐 Supports both public and private Google Drive folders
 
+## ⚠️ Important: Image Format Support
+
+**Supported:** JPG, PNG, WEBP, GIF ✅  
+**NOT Supported:** HEIC/HEIF (iPhone default format) ❌
+
+**If you have iPhone photos in HEIC format, you MUST convert them to JPG first!**  
+See [IMPORTANT.md](IMPORTANT.md) for detailed conversion instructions.
+
 ## Live Demo
 
 Once deployed, your gallery will look stunning with:

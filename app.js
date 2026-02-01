@@ -173,52 +173,21 @@ function isHeicFile(filename) {
 
 // Convert HEIC to JPEG
 async function convertHeicToJpeg(fileId, imgElement, containerElement) {
-    try {
-        // Fetch the HEIC file using Google Drive API
-        const apiKey = GOOGLE_CONFIG.API_KEY;
-        const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
-        
-        const response = await fetch(url);
-        
-        if (!response.ok) {
-            throw new Error('Failed to fetch HEIC file');
-        }
-        
-        const blob = await response.blob();
-        
-        // Convert to JPEG using heic2any library
-        const convertedBlob = await heic2any({
-            blob: blob,
-            toType: 'image/jpeg',
-            quality: 0.9
-        });
-        
-        // Create object URL and set as image source
-        const jpegUrl = URL.createObjectURL(convertedBlob);
-        imgElement.src = jpegUrl;
-        containerElement.classList.remove('loading-heic');
-        
-        // Store converted URL for lightbox
-        imgElement.dataset.convertedUrl = jpegUrl;
-        imgElement.dataset.fileId = fileId;
-    } catch (error) {
-        console.error('Error converting HEIC:', error);
-        // Show error message in the gallery item
-        containerElement.classList.remove('loading-heic');
-        containerElement.classList.add('heic-error');
-        containerElement.title = 'HEIC conversion failed. Please convert to JPG and re-upload.';
-    }
+    // HEIC files cannot be converted in browser due to CORS restrictions
+    // Show a helpful message instead
+    containerElement.classList.remove('loading-heic');
+    containerElement.classList.add('heic-error');
+    containerElement.title = 'HEIC files are not supported in web browsers. Please convert to JPG using iPhone Photos app or https://heictojpg.com and re-upload to Google Drive.';
+    
+    // Try to display anyway (won't work but good for debugging)
+    imgElement.src = `https://lh3.googleusercontent.com/d/${fileId}`;
 }
 
 // Get image URL
 function getImageUrl(fileId) {
-    const apiKey = GOOGLE_CONFIG.API_KEY;
-    if (apiKey) {
-        // Use Google Drive API to get the actual file content
-        return `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
-    }
-    // Fallback to direct link (may not work for all files)
-    return `https://drive.google.com/uc?export=view&id=${fileId}`;
+    // Use Google Drive's thumbnail/preview service which is CORS-friendly
+    // This works for public files without authentication
+    return `https://lh3.googleusercontent.com/d/${fileId}`;
 }
 
 // Lightbox functions
@@ -238,34 +207,12 @@ async function showLightboxImage() {
     
     // Check if it's a HEIC file
     if (isHeicFile(image.name)) {
-        // Show loading in lightbox
-        caption.textContent = 'Converting ' + image.name + '...';
-        
-        try {
-            const apiKey = GOOGLE_CONFIG.API_KEY;
-            const url = `https://www.googleapis.com/drive/v3/files/${image.id}?alt=media&key=${apiKey}`;
-            
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to fetch');
-            
-            const blob = await response.blob();
-            const convertedBlob = await heic2any({
-                blob: blob,
-                toType: 'image/jpeg',
-                quality: 0.9
-            });
-            const jpegUrl = URL.createObjectURL(convertedBlob);
-            lightboxImg.src = jpegUrl;
-        } catch (error) {
-            console.error('Error converting HEIC in lightbox:', error);
-            caption.textContent = 'Error: Cannot display HEIC file. Please convert to JPG.';
-            return;
-        }
+        caption.textContent = 'HEIC files cannot be displayed. Please convert to JPG and re-upload.';
+        lightboxImg.src = imageUrl; // Try anyway, won't work but prevents errors
     } else {
         lightboxImg.src = imageUrl;
+        caption.textContent = image.name;
     }
-    
-    caption.textContent = image.name;
 }
 
 function nextImage() {
